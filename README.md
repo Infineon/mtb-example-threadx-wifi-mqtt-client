@@ -391,6 +391,7 @@ Document title: *CE239410* - *MQTT client*
  Version | Description of change
  ------- | ---------------------
  1.0.0   | New code example
+ 1.1.0   | Adjusted Stack Size
 <br>
 
 ---------------------------------------------------------

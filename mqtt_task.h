@@ -51,7 +51,7 @@
 ********************************************************************************/
 /* Task parameters for MQTT Client Task. */
 #define MQTT_CLIENT_TASK_PRIORITY       (CY_RTOS_PRIORITY_NORMAL)
-#define MQTT_CLIENT_TASK_STACK_SIZE     (1024 * 2)
+#define MQTT_CLIENT_TASK_STACK_SIZE     (1024 * 4)
 #define portMAX_DELAY              0xffffffffUL
 /*******************************************************************************
 * Global Variables

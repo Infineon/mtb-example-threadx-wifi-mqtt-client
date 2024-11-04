@@ -141,14 +141,9 @@ void publisher_task(cy_thread_arg_t arg)
     /* Command to the MQTT client task */
     mqtt_task_cmd_t mqtt_task_cmd;
 
-    /* To avoid compiler warnings */
-  //  (void) pvParameters;
 
     /* Initialize and set-up the user button GPIO. */
     publisher_init();
-
-    /* Create a message queue to communicate with other tasks and callbacks. */
-   // publisher_task_q = xQueueCreate(PUBLISHER_TASK_QUEUE_LENGTH, sizeof(publisher_data_t));
 
     result = cy_rtos_queue_init(&publisher_task_q,PUBLISHER_TASK_QUEUE_LENGTH, sizeof(publisher_data_t));
 
@@ -162,7 +157,6 @@ void publisher_task(cy_thread_arg_t arg)
     while (true)
     {
         /* Wait for commands from other tasks and callbacks. */
-      //  if (pdTRUE == xQueueReceive(publisher_task_q, &publisher_q_data, portMAX_DELAY))
         if(CY_RSLT_SUCCESS == cy_rtos_queue_get(&publisher_task_q,&publisher_q_data,portMAX_DELAY))
         {
             switch(publisher_q_data.cmd)
@@ -200,11 +194,9 @@ void publisher_task(cy_thread_arg_t arg)
                          * client task.
                          */
                         mqtt_task_cmd = HANDLE_MQTT_PUBLISH_FAILURE;
-                  //      xQueueSend(mqtt_task_q, &mqtt_task_cmd, portMAX_DELAY);
                         cy_rtos_queue_put(&mqtt_task_q,&mqtt_task_cmd,portMAX_DELAY);
                     }
 
-               //     print_heap_usage("publisher_task: After publishing an MQTT message");
                     break;
                 }
             }
@@ -302,10 +294,6 @@ static void isr_button_press(void *callback_arg, cyhal_gpio_event_t event)
     }
 
     cy_rtos_queue_put(&publisher_task_q,&publisher_q_data,0);
-
-    /* Send the command and data to publisher task over the queue */
-//    xQueueSendFromISR(publisher_task_q, &publisher_q_data, &xHigherPriorityTaskWoken);
-//    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 }
 

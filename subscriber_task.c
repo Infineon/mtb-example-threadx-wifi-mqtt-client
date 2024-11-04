@@ -129,9 +129,6 @@ void subscriber_task(cy_thread_arg_t arg)
 
     cy_rslt_t result;
 
-    /* To avoid compiler warnings */
-  //  (void) pvParameters;
-
     /* Initialize the User LED. */
     cyhal_gpio_init(CYBSP_USER_LED, CYHAL_GPIO_DIR_OUTPUT, CYHAL_GPIO_DRIVE_PULLUP,
                     CYBSP_LED_STATE_OFF);
@@ -140,7 +137,6 @@ void subscriber_task(cy_thread_arg_t arg)
     subscribe_to_topic();
 
     /* Create a message queue to communicate with other tasks and callbacks. */
-   // subscriber_task_q = xQueueCreate(SUBSCRIBER_TASK_QUEUE_LENGTH, sizeof(subscriber_data_t));
     result = cy_rtos_queue_init(&subscriber_task_q,SUBSCRIBER_TASK_QUEUE_LENGTH, sizeof(subscriber_data_t));
 
     /*Check the status of Queue creation*/
@@ -176,8 +172,6 @@ void subscriber_task(cy_thread_arg_t arg)
 
                     /* Update the current device state extern variable. */
                     current_device_state = subscriber_q_data.data;
-
-               //     print_heap_usage("subscriber_task: After updating LED state");
                     break;
                 }
             }
@@ -287,8 +281,6 @@ void mqtt_subscription_callback(cy_mqtt_publish_info_t *received_msg_info)
         printf("  Subscriber: Received MQTT message not in valid format!\n");
         return;
     }
-
-   // print_heap_usage("MQTT subscription callback");
 
     /* Send the command and data to subscriber task queue */
     cy_rtos_queue_put(&subscriber_task_q, &subscriber_q_data, portMAX_DELAY);
